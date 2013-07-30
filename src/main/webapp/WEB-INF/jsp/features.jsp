@@ -9,7 +9,7 @@
 <body>
 	<c:forEach var="feature" items="${features.featureList}">
 		${feature.name}: ${feature.description}<br/>
-		<img src="image/test.jpg.do" height="160" width="200"></img>
+		<img src="${feature.featureImageURL}"height="160" width="200"></img>
 	</c:forEach>
 </body>
 </html>
