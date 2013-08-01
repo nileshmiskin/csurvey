@@ -10,6 +10,7 @@ public class FeedbackVO {
 	private long likeCount;
 	private long dislikeCount;
 	private UserVO userVO;
+	private boolean like;
 
 
 	public void setFeedbackId(String feedbackId) {
@@ -53,6 +54,15 @@ public class FeedbackVO {
 		return userVO;
 	}
 
+	public void setLike(boolean like) {
+		this.like = like;
+	}
+	
+	public boolean isLike() {
+		return like;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Feedback{comment:" + this.comment + ",likeCount:"

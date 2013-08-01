@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.cognizant.csurvey.model.Feature;
+import com.cognizant.csurvey.model.AggregateFeedbackStats;
 import com.cognizant.csurvey.repository.api.FeatureRepository;
 
 @Repository
@@ -49,8 +50,8 @@ public class FeatureRepositoryImpl implements FeatureRepository {
 
 	@Override
 	public Feature getActiveFeature() {
-		return mongoTemplate.findOne(
-				new Query(Criteria.where("active").is(true)), Feature.class);
+		return mongoTemplate.findOne(new Query(Criteria.where("active")
+				.is(true)), Feature.class);
 	}
 
 }

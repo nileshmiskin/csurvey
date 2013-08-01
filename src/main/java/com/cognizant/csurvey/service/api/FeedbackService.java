@@ -9,6 +9,8 @@ import com.cognizant.csurvey.model.User;
 public interface FeedbackService {
 	List<Feedback> getFeeedbacksByFeature(Feature feature);
 	
+	List<Feedback> getFeedbacksByFeatureLiking(Feature feature, boolean like);
+	
 	Feedback getFeedbackByFeature(Feature feature, User user);
 
 	Feedback getFeebackById(String id);
@@ -20,4 +22,6 @@ public interface FeedbackService {
 	void likeFeedback(String id);
 
 	void dislikeFeedback(String id);
+	
+	Long getTotalFeedbackCount();
 }

@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,9 +17,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.model.Feedback;
 import com.cognizant.csurvey.model.User;
+import com.cognizant.csurvey.repository.api.FeedbackRepository;
 import com.cognizant.csurvey.repository.api.FileStorageRepository;
 import com.cognizant.csurvey.service.api.FeatureService;
 import com.cognizant.csurvey.service.api.FeedbackService;
+import com.mongodb.DBObject;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "csurvey-servlet-test.xml",
@@ -37,106 +40,284 @@ public class TestDataGenerator {
 	@Autowired
 	private FileStorageRepository fileStorageRepository;
 
+	@Autowired
+	private FeedbackRepository feedbackRepository;
+
 	@Test
 	public void createFeatures() {
+
 		Feature f = new Feature();
 		f.setActive(true);
 		f.setName("mySpace");
 		f.setDescription("Store data in the cloud");
 		f.setImageName("cloud.jpg");
-		
+
 		Feedback fb1 = new Feedback();
 		fb1.setComment("Nice !!!");
 		fb1.setLike(true);
 		fb1.setFeature(f);
-		
+
 		Feedback fb2 = new Feedback();
 		fb2.setComment("good !!!");
 		fb2.setLike(true);
 		fb2.setFeature(f);
-		
+
 		Feedback fb3 = new Feedback();
 		fb3.setComment("Not useful...");
 		fb3.setLike(false);
 		fb3.setFeature(f);
-		
+
 		Feedback fb4 = new Feedback();
 		fb4.setComment("Greate !!!");
 		fb4.setLike(true);
 		fb4.setFeature(f);
-		
+
 		Feedback fb5 = new Feedback();
 		fb5.setComment("Not for me...");
 		fb5.setLike(false);
 		fb5.setFeature(f);
-		
-		
+
 		User user1 = new User();
 		user1.setName("Nilesh");
 		mongoTemplate.save(user1);
 		user1 = mongoTemplate.findOne(
-				new Query(Criteria.where("name").is("Nilesh")),
-				User.class);
+				new Query(Criteria.where("name").is("Nilesh")), User.class);
 		fb1.setUser(user1);
-		
+
 		User user2 = new User();
 		user2.setName("Abhilash");
 		mongoTemplate.save(user2);
 		user2 = mongoTemplate.findOne(
-				new Query(Criteria.where("name").is("Abhilash")),
-				User.class);
+				new Query(Criteria.where("name").is("Abhilash")), User.class);
 		fb2.setUser(user2);
-		
+
 		User user3 = new User();
 		user3.setName("Pratik");
 		mongoTemplate.save(user3);
 		user1 = mongoTemplate.findOne(
-				new Query(Criteria.where("name").is("Pratik")),
-				User.class);
+				new Query(Criteria.where("name").is("Pratik")), User.class);
 		fb3.setUser(user3);
-		
+
 		User user4 = new User();
 		user4.setName("Sujit");
 		mongoTemplate.save(user4);
 		user4 = mongoTemplate.findOne(
-				new Query(Criteria.where("name").is("Sujit")),
-				User.class);
+				new Query(Criteria.where("name").is("Sujit")), User.class);
 		fb4.setUser(user4);
-		
+
 		User user5 = new User();
 		user5.setName("Vikrant");
 		mongoTemplate.save(user5);
 		user5 = mongoTemplate.findOne(
-				new Query(Criteria.where("name").is("Vikrant")),
-				User.class);
+				new Query(Criteria.where("name").is("Vikrant")), User.class);
 		fb5.setUser(user5);
 
-//		User user = mongoTemplate.findOne(
-//				new Query(Criteria.where("name").is("New user")), User.class);
-//		if (null == user) {
-//			user = new User();
-//			user.setName("New user1");
-//			mongoTemplate.save(user);
-//			user = mongoTemplate.findOne(
-//					new Query(Criteria.where("name").is("New user")),
-//					User.class);
-//		}
-
-		
 		featureService.saveFeature(f);
 		feedbackService.saveFeedback(fb1);
 		feedbackService.saveFeedback(fb2);
 		feedbackService.saveFeedback(fb3);
 		feedbackService.saveFeedback(fb4);
 		feedbackService.saveFeedback(fb5);
+
+		// 2nd feature
+		Feature f1 = new Feature();
+		f1.setActive(true);
+		f1.setName("myMap");
+		f1.setDescription("Your personal navigator");
+		f1.setImageName("nav.jpg");
+
+		Feedback fb11 = new Feedback();
+		fb11.setComment("Nice maps !!!");
+		fb11.setLike(true);
+		fb11.setFeature(f1);
+
+		Feedback fb21 = new Feedback();
+		fb21.setComment("Not up to the mark !!!");
+		fb21.setLike(false);
+		fb21.setFeature(f1);
+
+		Feedback fb31 = new Feedback();
+		fb31.setComment("Not accurate...");
+		fb31.setLike(false);
+		fb31.setFeature(f1);
+
+		Feedback fb41 = new Feedback();
+		fb41.setComment("Okk !!!");
+		fb41.setLike(true);
+		fb41.setFeature(f1);
+
+		fb11.setUser(user1);
+		fb21.setUser(user2);
+		fb31.setUser(user3);
+		fb41.setUser(user4);
+
+		featureService.saveFeature(f1);
+		feedbackService.saveFeedback(fb11);
+		feedbackService.saveFeedback(fb21);
+		feedbackService.saveFeedback(fb31);
+		feedbackService.saveFeedback(fb41);
+		
+		
+		// 3rd feature
+		Feature f2 = new Feature();
+		f2.setActive(true);
+		f2.setName("Priority");
+		f2.setDescription("Priority - Feel Special!");
+		f2.setImageName("priority.jpg");
+
+		Feedback fb51 = new Feedback();
+		fb51.setComment("This is totally cool !!!");
+		fb51.setLike(true);
+		fb51.setFeature(f2);
+
+		Feedback fb52 = new Feedback();
+		fb52.setComment("Amazing...I got world cup tickets before my friends...Whoa!!");
+		fb52.setLike(true);
+		fb52.setFeature(f2);
+
+		Feedback fb53 = new Feedback();
+		fb53.setComment("I feel special...");
+		fb53.setLike(true);
+		fb53.setFeature(f2);
+
+		Feedback fb54 = new Feedback();
+		fb54.setComment("Its just Okk !!!");
+		fb54.setLike(false);
+		fb54.setFeature(f2);
+
+		fb51.setUser(user1);
+		fb52.setUser(user2);
+		fb53.setUser(user3);
+		fb54.setUser(user4);
+
+		featureService.saveFeature(f2);
+		feedbackService.saveFeedback(fb51);
+		feedbackService.saveFeedback(fb52);
+		feedbackService.saveFeedback(fb53);
+		feedbackService.saveFeedback(fb54);
+		
+		
+		// 4th feature
+		Feature f3 = new Feature();
+		f3.setActive(true);
+		f3.setName("MobileWallet");
+		f3.setDescription("Mobile Wallet - Freedom from cash!");
+		f3.setImageName("mobileWallet.jpg");
+
+		Feedback fb61 = new Feedback();
+		fb61.setComment("Crap..Doesn't work !!!");
+		fb61.setLike(false);
+		fb61.setFeature(f3);
+
+		Feedback fb62 = new Feedback();
+		fb62.setComment("No support on my mobile!!!");
+		fb62.setLike(false);
+		fb62.setFeature(f3);
+
+		Feedback fb63 = new Feedback();
+		fb63.setComment("Mobile money is total freedom...I am lovin it...");
+		fb63.setLike(true);
+		fb63.setFeature(f3);
+
+		Feedback fb64 = new Feedback();
+		fb64.setComment("Okk !!!");
+		fb64.setLike(true);
+		fb64.setFeature(f3);
+
+		fb61.setUser(user1);
+		fb62.setUser(user2);
+		fb63.setUser(user3);
+		fb64.setUser(user4);
+
+		featureService.saveFeature(f3);
+		feedbackService.saveFeedback(fb61);
+		feedbackService.saveFeedback(fb62);
+		feedbackService.saveFeedback(fb63);
+		feedbackService.saveFeedback(fb64);
+		
+		// 5th feature
+		Feature f4 = new Feature();
+		f4.setActive(true);
+		f4.setName("4G");
+		f4.setDescription("4G LTE - Get amazing online experience!");
+		f4.setImageName("4g.jpg");
+
+		Feedback fb71 = new Feedback();
+		fb71.setComment("Bang speed!");
+		fb71.setLike(true);
+		fb71.setFeature(f4);
+
+		Feedback fb72 = new Feedback();
+		fb72.setComment("I dint feel any difference compared to 3G");
+		fb72.setLike(false);
+		fb72.setFeature(f4);
+
+		Feedback fb73 = new Feedback();
+		fb73.setComment("Superfast...thats what I was waiting for since long! Thanks..");
+		fb73.setLike(true);
+		fb73.setFeature(f4);
+
+		Feedback fb74 = new Feedback();
+		fb74.setComment("Okk !!!");
+		fb74.setLike(true);
+		fb74.setFeature(f4);
+
+		fb71.setUser(user1);
+		fb72.setUser(user2);
+		fb73.setUser(user3);
+		fb74.setUser(user4);
+
+		featureService.saveFeature(f4);
+		feedbackService.saveFeedback(fb71);
+		feedbackService.saveFeedback(fb72);
+		feedbackService.saveFeedback(fb73);
+		feedbackService.saveFeedback(fb74);
+		
 	}
 
 	@Test
 	public void testIfItSavesFileToGridFs() throws FileNotFoundException {
 
-		InputStream inputStream = new FileInputStream(
-				"D:\\opt\\cloud.jpg");
-		String id = fileStorageRepository.save(inputStream, "image/jpeg",	"cloud.jpg");
+		/*
+		 * InputStream imgCloud = new FileInputStream(
+		 * "C:\\Users\\Public\\Pictures\\Sample Pictures\\cloud.jpg"); String id
+		 * = fileStorageRepository.save(imgCloud, "image/jpeg", "cloud.jpg");
+		 */
+		/*InputStream imgNav = new FileInputStream(
+				"C:\\Users\\Public\\Pictures\\Sample Pictures\\nav.jpg");
+		String id1 = fileStorageRepository
+				.save(imgNav, "image/jpeg", "nav.jpg");*/
+		
+		InputStream imgNav1 = new FileInputStream(
+				"C:\\Users\\Public\\Pictures\\Sample Pictures\\priority.jpg");
+		String id2 = fileStorageRepository
+				.save(imgNav1, "image/jpeg", "priority.jpg");
+		
+		InputStream imgNav2 = new FileInputStream(
+				"C:\\Users\\Public\\Pictures\\Sample Pictures\\4g.jpg");
+		String id3 = fileStorageRepository
+				.save(imgNav2, "image/jpeg", "4g.jpg");
+		
+		
+		InputStream imgNav3 = new FileInputStream(
+				"C:\\Users\\Public\\Pictures\\Sample Pictures\\mobileWallet.jpg");
+		String id4 = fileStorageRepository
+				.save(imgNav3, "image/jpeg", "mobileWallet.jpg");
+
 	}
 
+	@Test
+	public void testMapReduce() {
+		MapReduceResults<DBObject> results = mongoTemplate.mapReduce(
+				new Query(Criteria.where("like").is(true)), "feedback",
+				"classpath:com/cognizant/csurvey/test/map.js",
+				"classpath:com/cognizant/csurvey/test/reduce.js",
+				DBObject.class);
+		for (DBObject valueObject : results) {
+			System.out.println(valueObject);
+			System.out.println(valueObject.get("_id"));
+			System.out.println(valueObject.get("value"));
+		}
+
+	}
 }

@@ -25,11 +25,11 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Override
 	public void saveFeedback(Feedback feedback) {
-		Feedback fd = feedbackRepository.findByFeatureForUser(feedback.getFeature(), feedback.getUser());
-		if(fd == null){
+		Feedback fd = feedbackRepository.findByFeatureForUser(
+				feedback.getFeature(), feedback.getUser());
+		if (fd == null) {
 			feedbackRepository.save(feedback);
-		}
-		else{
+		} else {
 			feedbackRepository.update(feedback, fd.getId());
 		}
 	}
@@ -58,6 +58,17 @@ public class FeedbackServiceImpl implements FeedbackService {
 	@Override
 	public Feedback getFeedbackByFeature(Feature feature, User user) {
 		return feedbackRepository.findByFeatureForUser(feature, user);
+	}
+
+	@Override
+	public List<Feedback> getFeedbacksByFeatureLiking(Feature feature,
+			boolean like) {
+		return feedbackRepository.findByFeatureLiking(feature, like);
+	}
+
+	@Override
+	public Long getTotalFeedbackCount() {
+		return feedbackRepository.findTotalFeedbackCount();
 	}
 
 }

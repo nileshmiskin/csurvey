@@ -5,13 +5,17 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.cognizant.csurvey.model.FeedbackStats;
+
 @XmlRootElement(name = "feature")
 public class FeatureVO {
 	private String name;
 	private String description;
 	private boolean active;
+	private Long likeCount;
 	private String featureImageURL;
 	private List<FeedbackVO> feedbacks;
+	private FeedbackStats featureStats;
 
 	public void setName(String name) {
 		this.name = name;
@@ -37,6 +41,14 @@ public class FeatureVO {
 		return active;
 	}
 	
+	public void setLikeCount(Long likeCount) {
+		this.likeCount = likeCount;
+	}
+	
+	public Long getLikeCount() {
+		return likeCount;
+	}
+	
 	public void setFeatureImageURL(String featureImageURL) {
 		this.featureImageURL = featureImageURL;
 	}
@@ -52,6 +64,15 @@ public class FeatureVO {
 	@XmlElement(name = "feedback")
 	public List<FeedbackVO> getFeedbacks() {
 		return feedbacks;
+	}
+	
+	public void setFeatureStats(FeedbackStats featureStats) {
+		this.featureStats = featureStats;
+	}
+	
+	@XmlElement(name = "featureStats")
+	public FeedbackStats getFeatureStats() {
+		return featureStats;
 	}
 	
 	@Override
