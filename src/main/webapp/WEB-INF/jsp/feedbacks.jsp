@@ -1,9 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="ctx" value="<%=request.getContextPath()%>"></c:set>
-<table>
+<table style="align:justify">
 	<c:forEach var="feedback" items="${feature.feedbacks}">
 		<tr>
-			<td><c:out value="${feedback.comment}"></c:out></td>
+			<td><p><c:out value="${feedback.comment}"></c:out></p></td>
 			<td></td>
 		</tr>
 		<tr>
