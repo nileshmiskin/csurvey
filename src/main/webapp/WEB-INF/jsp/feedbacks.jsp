@@ -19,4 +19,5 @@
 				</c:choose> <c:out value="- ${feedback.userVO.name}"></c:out></td>
 		</tr>
 	</c:forEach>
+	<a href="${ctx}/features/${feature.name}/limit/-1.do" target="_blank">View all comments...</a>
 </table>

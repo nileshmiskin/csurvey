@@ -2,8 +2,6 @@ package com.cognizant.csurvey.web.vo;
 
 import javax.xml.bind.annotation.XmlElement;
 
-
-
 public class FeedbackVO {
 	private String feedbackId;
 	private String comment;

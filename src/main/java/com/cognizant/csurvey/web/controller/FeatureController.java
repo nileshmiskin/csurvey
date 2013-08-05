@@ -66,13 +66,17 @@ public class FeatureController {
 				featureList);
 	}
 
-	@RequestMapping("/features/{name}")
-	public String getFeature(@PathVariable String name, Model model) {
+	@RequestMapping("/features/{name}/limit/{limit}")
+	public String getFeature(@PathVariable("name") String name, @PathVariable("limit") int limit, Model model, HttpServletRequest request) {
 		Feature feature = featureService.getFeatureByName(name);
 		FeatureVO featureVO = new FeatureVO();
 		BeanUtils.copyProperties(feature, featureVO);
+		String featureImageURL = "http://" + serverName + ":" + serverPort
+				+ request.getContextPath() + "/image/"
+				+ feature.getImageName() + ".do";
+		featureVO.setFeatureImageURL(featureImageURL);
 		List<Feedback> feedbacks = feedbackService
-				.getFeeedbacksByFeature(feature);
+				.getFeeedbacksByFeature(feature, -1);
 		List<FeedbackVO> feedbackVOs = new ArrayList<FeedbackVO>();
 		for (Feedback feedback : feedbacks) {
 			User user = feedback.getUser();
@@ -83,6 +87,7 @@ public class FeatureController {
 			BeanUtils.copyProperties(feedback, feedbackVO);
 			feedbackVO.setFeedbackId(feedback.getId().toString());
 			feedbackVO.setUserVO(userVO);
+			featureVO.setFeatureStats(featureService.getFeatureStats(feature));
 			feedbackVOs.add(feedbackVO);
 		}
 		featureVO.setFeedbacks(feedbackVOs);

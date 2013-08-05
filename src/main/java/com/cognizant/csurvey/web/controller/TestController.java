@@ -1,23 +1,19 @@
-package com.cognizant.csurvey.test;
+package com.cognizant.csurvey.web.controller;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cognizant.csurvey.model.Application;
 import com.cognizant.csurvey.model.ApplicationStats;
@@ -29,12 +25,28 @@ import com.cognizant.csurvey.repository.api.FeedbackRepository;
 import com.cognizant.csurvey.repository.api.FileStorageRepository;
 import com.cognizant.csurvey.service.api.FeatureService;
 import com.cognizant.csurvey.service.api.FeedbackService;
-import com.mongodb.DBObject;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "csurvey-servlet-test.xml",
-		"app-dao-test.xml" })
-public class TestDataGenerator {
+@Controller
+public class TestController {
+
+	@RequestMapping("/test/loadtestdata")
+	public @ResponseBody String loadTestData() throws FileNotFoundException {
+		createUser();
+		createApps();
+		createFeatures();
+		testIfItSavesFileToGridFs();
+		return "success";
+	}
+	
+	@RequestMapping("/test/removetestdata")
+	public @ResponseBody String removeAllData(){
+		mongoTemplate.dropCollection(Feedback.class);
+		mongoTemplate.dropCollection(Feature.class);
+		mongoTemplate.dropCollection(Application.class);
+		mongoTemplate.dropCollection(User.class);
+		gridOperation.delete(new Query(Criteria.where("filename").ne("Sample.jpg")));
+		return "success";
+	}
 
 	User user1;
 	User user2;
@@ -59,8 +71,10 @@ public class TestDataGenerator {
 
 	@Autowired
 	private FeedbackRepository feedbackRepository;
+	
+	@Autowired
+	private GridFsOperations gridOperation;
 
-	@Test
 	public void createUser() {
 
 		user1 = new User();
@@ -85,7 +99,6 @@ public class TestDataGenerator {
 
 	}
 
-	@Test
 	public void createApps() {
 
 		user1 = mongoTemplate.findOne(
@@ -133,7 +146,6 @@ public class TestDataGenerator {
 				.findApplicationStats();
 	}
 
-	@Test
 	public void createFeatures() {
 
 		Application a1 = mongoTemplate.findOne(new Query(Criteria.where("name")
@@ -357,56 +369,42 @@ public class TestDataGenerator {
 
 	}
 
-	@Test
 	public void testIfItSavesFileToGridFs() throws FileNotFoundException {
 
 		try {
-			URL cloudURL= new URL("http://thegadgetsquare.com/wp-content/uploads/2013/07/Cloud-Computing.jpg");
+			URL cloudURL = new URL(
+					"http://thegadgetsquare.com/wp-content/uploads/2013/07/Cloud-Computing.jpg");
 			InputStream cloudstream = cloudURL.openStream();
 			String id1 = fileStorageRepository.save(cloudstream, "image/jpeg",
 					"cloud.jpg");
-			
-			URL navURL= new URL("http://www.prominentpeaks.org.uk/images/Google_map_navigation.jpg");
+
+			URL navURL = new URL(
+					"http://www.prominentpeaks.org.uk/images/Google_map_navigation.jpg");
 			InputStream navStream = navURL.openStream();
 			String id2 = fileStorageRepository.save(navStream, "image/jpeg",
 					"nav.jpg");
-			
-			URL mobileWalletURL= new URL("http://cdn2.hubspot.net/hub/75217/file-25904848-jpg/mobile_wallet_for_landing_page.jpg?t=1364584236000");
+
+			URL mobileWalletURL = new URL(
+					"http://cdn2.hubspot.net/hub/75217/file-25904848-jpg/mobile_wallet_for_landing_page.jpg?t=1364584236000");
 			InputStream mobileWalletStream = mobileWalletURL.openStream();
-			String id3 = fileStorageRepository.save(mobileWalletStream, "image/jpeg",
-					"mobileWallet.jpg");
-			
+			String id3 = fileStorageRepository.save(mobileWalletStream,
+					"image/jpeg", "mobileWallet.jpg");
+
 			URL gURL = new URL("http://www.rfdesignuk.com/images/4g.jpg");
 			InputStream gStream = gURL.openStream();
 			String id4 = fileStorageRepository.save(gStream, "image/jpeg",
 					"4g.jpg");
-			
-			URL priorityURL = new URL("http://img-android.lisisoft.com/img/5/5/1955-1-com.goldengekko.o2pm.jpg");
+
+			URL priorityURL = new URL(
+					"http://img-android.lisisoft.com/img/5/5/1955-1-com.goldengekko.o2pm.jpg");
 			InputStream priorityStream = priorityURL.openStream();
-			String id5 = fileStorageRepository.save(priorityStream, "image/jpeg",
-					"priority.jpg");
+			String id5 = fileStorageRepository.save(priorityStream,
+					"image/jpeg", "priority.jpg");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 
 	}
-
-	@Test
-	public void testMapReduce() {
-		MapReduceResults<DBObject> results = mongoTemplate.mapReduce(new Query(
-				Criteria.where("like").is(true)), "feedback",
-				"classpath:com/cognizant/csurvey/test/map.js",
-				"classpath:com/cognizant/csurvey/test/reduce.js",
-				DBObject.class);
-		for (DBObject valueObject : results) {
-			System.out.println(valueObject);
-			System.out.println(valueObject.get("_id"));
-			System.out.println(valueObject.get("value"));
-		}
-
-	}
-
+	
 }

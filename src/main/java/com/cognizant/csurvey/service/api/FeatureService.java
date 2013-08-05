@@ -3,6 +3,7 @@ package com.cognizant.csurvey.service.api;
 import java.util.List;
 
 import com.cognizant.csurvey.model.AggregateFeedbackStats;
+import com.cognizant.csurvey.model.Application;
 import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.model.FeedbackStats;
 import com.mongodb.gridfs.GridFSDBFile;
@@ -17,4 +18,5 @@ public interface FeatureService {
 	FeedbackStats getFeatureStats(Feature feature);
 	List<AggregateFeedbackStats> getAggergateFeedbackStats();
 	Feature getById(String id);
+	List<Feature> getFeaturesByApplication(Application application);
 }

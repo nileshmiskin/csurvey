@@ -19,8 +19,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Override
 	public Feedback getFeebackById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return feedbackRepository.findById(id);
 	}
 
 	@Override
@@ -36,8 +35,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Override
 	public void deleteFeedback(String id) {
-		// TODO Auto-generated method stub
-
+		feedbackRepository.delete(id);
 	}
 
 	@Override
@@ -51,8 +49,8 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public List<Feedback> getFeeedbacksByFeature(Feature feature) {
-		return feedbackRepository.findByFeature(feature);
+	public List<Feedback> getFeeedbacksByFeature(Feature feature, int limit) {
+		return feedbackRepository.findByFeature(feature, limit);
 	}
 
 	@Override

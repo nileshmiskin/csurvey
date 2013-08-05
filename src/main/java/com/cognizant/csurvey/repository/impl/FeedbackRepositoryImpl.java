@@ -50,10 +50,19 @@ public class FeedbackRepositoryImpl implements FeedbackRepository {
 	}
 
 	@Override
-	public List<Feedback> findByFeature(Feature feature) {
-		return mongoTemplate.find(
-				new Query(Criteria.where("feature.$id").is(feature.getId())),
+	public List<Feedback> findByFeature(Feature feature, int limit) {
+		List<Feedback> feedbacks = null;
+		if(limit == -1){
+			feedbacks = mongoTemplate.find(
+					new Query(Criteria.where("feature.$id").is(feature.getId())),
+					Feedback.class);
+		}
+		else{
+		feedbacks = mongoTemplate.find(
+				new Query(Criteria.where("feature.$id").is(feature.getId())).limit(limit),
 				Feedback.class);
+		}
+		return feedbacks; 
 	}
 
 	@Override

@@ -20,7 +20,7 @@
 		</div>
 	</div>
 	<div class="w-col w-col-3">
-		<br />
+		<h3>Responses</h3>
 		<div id="container" style="width: 250px; height: 250px; align: left"></div>
 		<br />
 	</div>

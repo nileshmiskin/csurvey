@@ -1,7 +1,6 @@
 package com.cognizant.csurvey.web.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cognizant.csurvey.model.AggregateFeedbackStats;
+import com.cognizant.csurvey.model.Application;
+import com.cognizant.csurvey.model.ApplicationStats;
 import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.model.Feedback;
-import com.cognizant.csurvey.model.SortByLikeCount;
 import com.cognizant.csurvey.model.User;
+import com.cognizant.csurvey.service.api.ApplicationService;
 import com.cognizant.csurvey.service.api.FeatureService;
 import com.cognizant.csurvey.service.api.FeedbackService;
 import com.cognizant.csurvey.web.vo.DashboardVO;
@@ -37,6 +37,9 @@ public class DashboardController {
 	@Autowired
 	FeedbackService feedbackService;
 
+	@Autowired
+	ApplicationService applicationService;
+
 	@Value("${application.server}")
 	private String serverName;
 
@@ -49,41 +52,59 @@ public class DashboardController {
 	}
 
 	@RequestMapping("dashboard")
-	public String showDashboard(Model model) {
-		
-		/* Features to display in dropdown */
-		List<Feature> features = featureService.getAllFeatures();
-		
-		/* Fetch likes per feature  */
-		List<AggregateFeedbackStats> feedbackStats = featureService
-				.getAggergateFeedbackStats();
-		Collections.sort(feedbackStats, new SortByLikeCount());
-		
-		/* Fetch total feedback count  */
-		Long totalFeedbackCount = feedbackService.getTotalFeedbackCount();
-		List<FeatureVO> featureVOs = new ArrayList<FeatureVO>();
-		long count = 0;
-		for (int i = 0; i < 4 && i < feedbackStats.size(); i++) {
-			Feature feature = featureService.getById(feedbackStats.get(i)
-					.getFeatureId());
-			FeatureVO fvo = new FeatureVO();
-			BeanUtils.copyProperties(feature, fvo);
-			Long likeCount = feedbackStats.get(i).getLikeCount();
-			count += likeCount;
-			fvo.setLikeCount(likeCount);
-			featureVOs.add(fvo);
+	public String showApplication(Model model,
+			@ModelAttribute DashboardVO dashboardVO) {
+
+		/* Applications to display in dropdown */
+		List<Application> applications = applicationService
+				.getAllApplications();
+
+		/* Fetch user stats for all applications */
+		List<ApplicationStats> applicationStats = applicationService
+				.getApplicationStats();
+
+		if (null != dashboardVO.getSelectedApplication()
+				&& !dashboardVO.getSelectedApplication().equals("-1")) {
+			// Fetch application data
+			Application application = applicationService
+					.getApplicationById(dashboardVO.getSelectedApplication());
+
+			// Features to display in dropdown
+			List<Feature> features = featureService
+					.getFeaturesByApplication(application);
+
+			List<FeatureVO> featureVOs = new ArrayList<FeatureVO>();
+			for (Feature feature : features) {
+				FeatureVO featureVO = new FeatureVO();
+				BeanUtils.copyProperties(feature, featureVO);
+				featureVO.setFeatureStats(featureService
+						.getFeatureStats(feature));
+				featureVOs.add(featureVO);
+			}
+			dashboardVO.setFeatures(features);
+			dashboardVO.setFeatureVOs(featureVOs);
 		}
-		
-		/* Treat all other features as Other feature*/
-		FeatureVO fvo = new FeatureVO();
-		fvo.setName("Others");
-		fvo.setLikeCount(totalFeedbackCount - count);
-		featureVOs.add(fvo);
+
+		dashboardVO.setApplications(applications);
+		dashboardVO.setApplicationStats(applicationStats);
+		model.addAttribute("dashboardVO", dashboardVO);
+		return "dashboard";
+	}
+
+	// @RequestMapping("dashboard")
+	public String showDashboard(Model model) {
+
+		/* Applications to display in dropdown */
+		List<Application> applications = applicationService
+				.getAllApplications();
+
+		/* Fetch user stats for all applications */
+		List<ApplicationStats> applicationStats = applicationService
+				.getApplicationStats();
 
 		DashboardVO dashboardVO = getDashboardVO();
-		dashboardVO.setFeatures(features);
-		dashboardVO.setTopFeatures(featureVOs);
-		dashboardVO.setTotalFeedbackCount(totalFeedbackCount);
+		dashboardVO.setApplications(applications);
+		dashboardVO.setApplicationStats(applicationStats);
 		model.addAttribute("dashboardVO", dashboardVO);
 		return "dashboard";
 	}
@@ -96,8 +117,8 @@ public class DashboardController {
 		Feature feature = featureService.getFeatureByName(featureName);
 		if (feature != null) {
 
-			List<Feedback> feedbacks = feedbackService
-					.getFeeedbacksByFeature(feature);
+			List<Feedback> feedbacks = feedbackService.getFeeedbacksByFeature(
+					feature, 3);
 
 			String featureImageURL = "http://" + serverName + ":" + serverPort
 					+ request.getContextPath() + "/image/"

@@ -10,7 +10,7 @@ import com.cognizant.csurvey.model.Feedback;
 import com.cognizant.csurvey.model.User;
 
 public interface FeedbackRepository extends GenericRepository<Feedback>{
-	List<Feedback> findByFeature(Feature feature);
+	List<Feedback> findByFeature(Feature feature, int limit);
 	List<Feedback> findByFeatureLiking(Feature feature, boolean like);
 	Feedback findByFeatureForUser(Feature feature, User user);
 	void saveLike(String feedbackId, boolean like);

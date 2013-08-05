@@ -13,6 +13,10 @@
 	<bean id="feedbackRepository" class="com.cognizant.csurvey.repository.impl.FeedbackRepositoryImpl">
 		<property name="mongoTemplate" ref="mongoTemplate" />
 	</bean>
+	
+	<bean id="aplicationRepository" class="com.cognizant.csurvey.repository.impl.ApplicationRepositoryImpl">
+		<property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongo" ref="mongo" />

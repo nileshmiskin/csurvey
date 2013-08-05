@@ -11,6 +11,11 @@
 		class="com.cognizant.csurvey.repository.impl.FeatureRepositoryImpl">
 		<property name="mongoTemplate" ref="mongoTemplate" />
 	</bean>
+	
+	<bean id="applicationRepository"
+		class="com.cognizant.csurvey.repository.impl.ApplicationRepositoryImpl">
+		<property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>
 
 	<bean id="feedbackRepository"
 		class="com.cognizant.csurvey.repository.impl.FeedbackRepositoryImpl">

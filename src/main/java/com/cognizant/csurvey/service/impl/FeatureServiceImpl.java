@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cognizant.csurvey.model.AggregateFeedbackStats;
+import com.cognizant.csurvey.model.Application;
 import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.model.FeedbackStats;
 import com.cognizant.csurvey.repository.api.FeatureRepository;
@@ -83,6 +84,11 @@ public class FeatureServiceImpl implements FeatureService {
 	@Override
 	public Feature getById(String id) {
 		return featureRepository.findById(id);
+	}
+
+	@Override
+	public List<Feature> getFeaturesByApplication(Application application) {
+		return featureRepository.findByAppication(application);
 	}
 
 }

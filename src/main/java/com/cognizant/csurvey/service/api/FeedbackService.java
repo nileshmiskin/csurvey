@@ -7,7 +7,7 @@ import com.cognizant.csurvey.model.Feedback;
 import com.cognizant.csurvey.model.User;
 
 public interface FeedbackService {
-	List<Feedback> getFeeedbacksByFeature(Feature feature);
+	List<Feedback> getFeeedbacksByFeature(Feature feature, int limit);
 	
 	List<Feedback> getFeedbacksByFeatureLiking(Feature feature, boolean like);
 	

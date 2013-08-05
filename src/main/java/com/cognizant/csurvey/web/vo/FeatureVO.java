@@ -16,6 +16,7 @@ public class FeatureVO {
 	private String featureImageURL;
 	private List<FeedbackVO> feedbacks;
 	private FeedbackStats featureStats;
+	private ApplicationVO applicationVO;
 
 	public void setName(String name) {
 		this.name = name;
@@ -73,6 +74,15 @@ public class FeatureVO {
 	@XmlElement(name = "featureStats")
 	public FeedbackStats getFeatureStats() {
 		return featureStats;
+	}
+	
+	public void setApplicationVO(ApplicationVO application) {
+		this.applicationVO = application;
+	}
+	
+	@XmlElement(name = "application")
+	public ApplicationVO getApplicationVO() {
+		return applicationVO;
 	}
 	
 	@Override

@@ -54,6 +54,8 @@ public class Feedback {
 	public User getUser() {
 		return user;
 	}
+	
+
 
 	@Override
 	public String toString() {

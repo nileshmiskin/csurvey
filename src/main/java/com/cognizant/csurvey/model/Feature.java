@@ -2,6 +2,7 @@ package com.cognizant.csurvey.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "feature")
@@ -12,6 +13,8 @@ public class Feature {
 	private String description;
 	private boolean active;
 	private String imageName;
+	@DBRef
+	private Application application;
 	
 	public String getImageName() {
 		return imageName;
@@ -51,6 +54,14 @@ public class Feature {
 
 	public boolean isActive() {
 		return active;
+	}
+	
+	public void setApplication(Application application) {
+		this.application = application;
+	}
+	
+	public Application getApplication() {
+		return application;
 	}
 
 	@Override

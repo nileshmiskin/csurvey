@@ -2,13 +2,14 @@ package com.cognizant.csurvey.repository.impl;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.cognizant.csurvey.model.Application;
 import com.cognizant.csurvey.model.Feature;
-import com.cognizant.csurvey.model.AggregateFeedbackStats;
 import com.cognizant.csurvey.repository.api.FeatureRepository;
 
 @Repository
@@ -52,6 +53,14 @@ public class FeatureRepositoryImpl implements FeatureRepository {
 	public Feature getActiveFeature() {
 		return mongoTemplate.findOne(new Query(Criteria.where("active")
 				.is(true)), Feature.class);
+	}
+
+	@Override
+	public List<Feature> findByAppication(Application application) {
+		List<Feature> features = mongoTemplate.find(new Query(Criteria.where("application.$id")
+				.is(application.getId())), Feature.class);
+		return features;
+
 	}
 
 }
