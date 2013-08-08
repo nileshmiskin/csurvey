@@ -71,8 +71,7 @@ public class FeatureController {
 		Feature feature = featureService.getFeatureByName(name);
 		FeatureVO featureVO = new FeatureVO();
 		BeanUtils.copyProperties(feature, featureVO);
-		String featureImageURL = "http://" + serverName + ":" + serverPort
-				+ request.getContextPath() + "/image/"
+		String featureImageURL = request.getContextPath() + "/image/"
 				+ feature.getImageName() + ".do";
 		featureVO.setFeatureImageURL(featureImageURL);
 		List<Feedback> feedbacks = feedbackService

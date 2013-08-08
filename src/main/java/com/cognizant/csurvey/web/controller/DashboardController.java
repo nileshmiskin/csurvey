@@ -1,6 +1,7 @@
 package com.cognizant.csurvey.web.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -85,6 +86,9 @@ public class DashboardController {
 			dashboardVO.setFeatureVOs(featureVOs);
 		}
 
+		// Sort application stats
+		Collections.sort(applicationStats);
+		
 		dashboardVO.setApplications(applications);
 		dashboardVO.setApplicationStats(applicationStats);
 		model.addAttribute("dashboardVO", dashboardVO);
@@ -120,8 +124,7 @@ public class DashboardController {
 			List<Feedback> feedbacks = feedbackService.getFeeedbacksByFeature(
 					feature, 3);
 
-			String featureImageURL = "http://" + serverName + ":" + serverPort
-					+ request.getContextPath() + "/image/"
+			String featureImageURL = request.getContextPath() + "/image/"
 					+ feature.getImageName() + ".do";
 
 			List<FeedbackVO> feedbackVOs = new ArrayList<FeedbackVO>();
@@ -160,8 +163,7 @@ public class DashboardController {
 			List<Feedback> feedbacks = feedbackService
 					.getFeedbacksByFeatureLiking(feature, true);
 
-			String featureImageURL = "http://" + serverName + ":" + serverPort
-					+ request.getContextPath() + "/image/"
+			String featureImageURL = request.getContextPath() + "/image/"
 					+ feature.getImageName() + ".do";
 
 			List<FeedbackVO> feedbackVOs = new ArrayList<FeedbackVO>();
@@ -200,8 +202,7 @@ public class DashboardController {
 			List<Feedback> feedbacks = feedbackService
 					.getFeedbacksByFeatureLiking(feature, false);
 
-			String featureImageURL = "http://" + serverName + ":" + serverPort
-					+ request.getContextPath() + "/image/"
+			String featureImageURL = request.getContextPath() + "/image/"
 					+ feature.getImageName() + ".do";
 
 			List<FeedbackVO> feedbackVOs = new ArrayList<FeedbackVO>();

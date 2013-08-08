@@ -221,12 +221,11 @@
 		<div class="nav-section">
 			<div class="w-container">
 				<div class="w-row">
-					<div class="w-col w-col-4">
+					<div class="w-col w-col-2">
 						<div class="company">
-							<img alt="Cognizant" src="${ctx}/resources/images/cogni.png" height="40" width="120"></img>&nbsp;Dashboard <br>
+							Dashboard <br>
 						</div>
 					</div>
-					<div class="w-col w-col-2"></div>
 					<div class="w-col w-col-2">
 						<form:select id="selectedApplication" path="selectedApplication"
 							class="headSelect" onchange="getApplicationDetails(this.value)">
@@ -238,18 +237,27 @@
 							</c:forEach>
 						</form:select>
 					</div>
+					<div class="w-col w-col-2"></div>
 					<div class="w-col w-col-2">
-						<c:if test="${not empty dashboardVO.selectedApplication and dashboardVO.selectedApplication ne '-1'}">
-						<form:select id="selectedFeature" path="selectedFeature"
-							class="headSelect" onchange="getFeatureDetails(this.value)">
-							<form:option value="-1">Select</form:option>
-							<c:forEach var="feature" items="${dashboardVO.features}">
-								<form:option value="${feature.name }">
-									<c:out value="${feature.name }"></c:out>
-								</form:option>
-							</c:forEach>
-						</form:select>
+						<c:if
+							test="${not empty dashboardVO.selectedApplication and dashboardVO.selectedApplication ne '-1'}">
+							<form:select id="selectedFeature" path="selectedFeature"
+								class="headSelect" onchange="getFeatureDetails(this.value)">
+								<form:option value="-1">Select</form:option>
+								<c:forEach var="feature" items="${dashboardVO.features}">
+									<form:option value="${feature.name }">
+										<c:out value="${feature.name }"></c:out>
+									</form:option>
+								</c:forEach>
+							</form:select>
 						</c:if>
+					</div>
+					<div class="w-col w-col-2"></div>
+					<div class="w-col w-col-2">
+						<div class="company">
+							<img alt="Cognizant" src="${ctx}/resources/images/cogni.png"
+								height="40" width="140"></img>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -262,7 +270,19 @@
 							width="auto" height="auto" alt="image-placeholder.svg">
 					</div>
 					<div class="w-col w-col-6">
-						<div id="fcontainer"></div>					
+						<div id="fcontainer">
+							<article>
+							<h4>Applications</h4>
+							<c:forEach var="application" items="${dashboardVO.applications}">
+								<p>
+									<b><c:out value="${application.name}" /></b>
+								<p>
+									<c:out value="${application.description}" />
+								</p>
+								<br/>
+							</c:forEach>
+							</article>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -295,7 +315,8 @@
 	</form:form>
 	<script type="text/javascript">
 	displayAppUsersChart();
- 	displayFeaturesForApp();
+	if($("#selectedApplication").val()!= "-1")
+		displayFeaturesForApp();
 	</script>
 </body>
 </html>

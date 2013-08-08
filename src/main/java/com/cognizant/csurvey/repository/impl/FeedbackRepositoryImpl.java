@@ -11,8 +11,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.model.AggregateFeedbackStats;
+import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.model.Feedback;
 import com.cognizant.csurvey.model.User;
 import com.cognizant.csurvey.repository.api.FeedbackRepository;
@@ -126,6 +126,19 @@ public class FeedbackRepositoryImpl implements FeedbackRepository {
 			stats.setLikeCount(((Double)dbo.get("value")).longValue());
 			statsList.add(stats);
 		}
+		
+		/*List<AggregateFeedbackStats> statsList = new ArrayList<AggregateFeedbackStats>();
+		List<Feature> features = mongoTemplate.find(new Query(Criteria.where("active").is(true)), Feature.class);
+		for(Feature feature : features){
+			AggregateFeedbackStats stats =  new AggregateFeedbackStats();
+			Long count = mongoTemplate.count(
+					new Query(Criteria.where("feature.$id").is(feature.getId())
+							.andOperator(Criteria.where("like").is(true))),
+					Feedback.class);
+			stats.setFeatureId(feature.getId().toString());
+			stats.setLikeCount(count);
+			statsList.add(stats);
+		}*/
 		return statsList;
 	}
 

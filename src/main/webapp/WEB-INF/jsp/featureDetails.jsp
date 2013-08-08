@@ -28,10 +28,15 @@
 		<h3>Comments</h3>
 		<div id="feedbackDiv">
 			<%@ include file="feedbacks.jsp"%>
+			<a id="viewMore" href="${ctx}/features/${feature.name}/limit/-1.do" target="_blank">View all comments...</a>
 		</div>
 	</div>
 	<div class="w-col w-col-3"></div>
 </div>
+<script type="text/javascript">
+	if($("#selectedApplication").val() == undefined)
+	$("#viewMore").remove();
+</script>
 
 <input type="hidden" id="likeCount"
 	value="${feature.featureStats.likeCount}"></input>

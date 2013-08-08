@@ -114,9 +114,16 @@ function getFeatureLikedDetails(feature, liking) {
 	<div class="nav-section">
 		<div class="w-container">
 			<div class="w-row">
-				<div class="w-col w-col-4">
+				<div class="w-col w-col-1"></div>
+				<div class="w-col w-col-3">
 					<div class="company">
-						<img alt="Cognizant" src="${ctx}/resources/images/cogni.png" height="40" width="120"></img>&nbsp;Dashboard <br>
+						Dashboard <br>
+					</div>
+				</div>
+				<div class="w-col w-col-6"></div>
+				<div class="w-col w-col-2">
+					<div class="company">
+					<img alt="Cognizant" src="${ctx}/resources/images/cogni.png" height="40" width="120"></img>
 					</div>
 				</div>
 			</div>
@@ -125,18 +132,6 @@ function getFeatureLikedDetails(feature, liking) {
 	<div class="section hero">
 		<div class="">
 			<div class="w-row">
-				<%-- Feature Name:
-				<c:out value="${feature.name}"></c:out>
-				<br /> <img src="${feature.featureImageURL}" height="160"
-					width="200"></img> <br /> Feature Description:
-				<c:out value="${feature.description}"></c:out>
-				<br />
-				<c:forEach var="feedback" items="${feature.feedbacks}">
-					<textarea>${feedback.comment}</textarea>
-					<br />
-					<input id="feedbackId" type="hidden" value="${feedback.feedbackId}"></input>
-				</c:forEach> --%>
-
 				<%@include file="featureDetails.jsp"%>
 			</div>
 		</div>

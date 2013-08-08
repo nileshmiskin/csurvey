@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import com.cognizant.csurvey.model.AggregateFeedbackStats;
 import com.cognizant.csurvey.model.Application;
 import com.cognizant.csurvey.model.ApplicationStats;
+import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.repository.api.ApplicationRepository;
 import com.mongodb.DBObject;
 
@@ -58,9 +59,15 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
 			stats.setUserCount(((Double)dbo.get("value")).longValue());
 			statsList.add(stats);
 		}
+		/*List<ApplicationStats> statsList = new ArrayList<ApplicationStats>();
+		List<Application> applications = this.findAll();
+		for(Application application : applications){
+			ApplicationStats stats =  new ApplicationStats();
+			stats.setName(application.getName());
+			stats.setUserCount(new Long(application.getUsers().size()));
+			statsList.add(stats);
+		}*/
 		return statsList;
 	}
-
-	
 
 }

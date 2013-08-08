@@ -1,6 +1,6 @@
 package com.cognizant.csurvey.model;
 
-public class ApplicationStats {
+public class ApplicationStats implements Comparable<ApplicationStats>{
 	private String name;
 	private Long userCount;
 	public String getName() {
@@ -15,6 +15,9 @@ public class ApplicationStats {
 	public void setUserCount(Long userCount) {
 		this.userCount = userCount;
 	}
-	
+	@Override
+	public int compareTo(ApplicationStats o) {
+		return o.getUserCount().compareTo(this.getUserCount());
+	}
 	
 }

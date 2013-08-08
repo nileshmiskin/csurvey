@@ -1,18 +1,17 @@
 package com.cognizant.csurvey.test;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapreduce.GroupBy;
+import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -406,7 +405,9 @@ public class TestDataGenerator {
 			System.out.println(valueObject.get("_id"));
 			System.out.println(valueObject.get("value"));
 		}
-
+		
+		GroupByResults<DBObject> gbr = mongoTemplate.group(Criteria.where("like").is(true), "feedback", GroupBy.key("this.feature.$id").initialDocument("{}").reduceFunction("function (featureId, values) {var sum = 0;for (var i = 0; i < values.length; i++) sum += values[i];return sum;}"), DBObject.class);
+		System.out.println(gbr);
 	}
 
 }
