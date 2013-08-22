@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xmlns:cloud="http://schema.cloudfoundry.org/spring"
 	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
            http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
            http://schema.cloudfoundry.org/spring/cloudfoundry-spring.xsd">
-	
-	<bean id="featureRepository" class="com.cognizant.csurvey.repository.impl.FeatureRepositoryImpl">
+
+	<bean id="featureRepository"
+		class="com.cognizant.csurvey.repository.impl.FeatureRepositoryImpl">
 		<property name="mongoTemplate" ref="mongoTemplate" />
 	</bean>
 
-	<bean id="feedbackRepository" class="com.cognizant.csurvey.repository.impl.FeedbackRepositoryImpl">
+	<bean id="feedbackRepository"
+		class="com.cognizant.csurvey.repository.impl.FeedbackRepositoryImpl">
+		<property name="mongoTemplate" ref="mongoTemplate" />
+	</bean>
+
+	<bean id="aplicationRepository"
+		class="com.cognizant.csurvey.repository.impl.ApplicationRepositoryImpl">
 		<property name="mongoTemplate" ref="mongoTemplate" />
 	</bean>
 	
-	<bean id="aplicationRepository" class="com.cognizant.csurvey.repository.impl.ApplicationRepositoryImpl">
+	<bean id="userRepository"
+		class="com.cognizant.csurvey.repository.impl.UserRepositoryImpl">
 		<property name="mongoTemplate" ref="mongoTemplate" />
 	</bean>
-	
-	<!-- <bean id="mongoURI" class="com.mongodb.MongoURI">
-      <constructor-arg value="mongodb://:@localhost:27017/csurvey"/>
-    </bean> -->
+
+	<!-- <bean id="mongoURI" class="com.mongodb.MongoURI"> <constructor-arg 
+		value="mongodb://:@localhost:27017/csurvey"/> </bean> -->
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
 	</bean>
 
 	<!-- Factory bean that creates the Mongo instance -->
-	<!-- <bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
-		<property name="host" value="${cloud.services.csurvey.connection.hostname}" />
-		<property name="port" value="${cloud.services.csurvey.connection.port}" />
-		<property name="host" value="${database.server}" />
-		<property name="port" value="${database.server.port}" />
-	</bean> -->
+	<!-- <bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean"> 
+		<property name="host" value="${cloud.services.csurvey.connection.hostname}" 
+		/> <property name="port" value="${cloud.services.csurvey.connection.port}" 
+		/> <property name="host" value="${database.server}" /> <property name="port" 
+		value="${database.server.port}" /> </bean> -->
 
 
-	<!-- <mongo:db-factory dbname="csurvey" host="${database.server}" port="${database.server.port}"/> -->
-<!-- 	<mongo:db-factory uri="mongodb://${database.user}:${database.password}@${database.server}:${database.port}/csurvey"/> -->
-	<mongo:db-factory uri="mongodb://${database.server}:${database.port}/csurvey"/> 
+	<mongo:db-factory dbname="${database.name}" host="${database.server}" port="${database.port}"/>
+	<!-- <mongo:db-factory
+		uri="mongodb://${database.user}:${database.password}@${database.server}:${database.port}/csurvey" /> -->
+	<!-- <mongo:db-factory uri="mongodb://${database.server}:${database.port}/csurvey"/> -->
 	<mongo:mapping-converter id="converter"
 		db-factory-ref="mongoDbFactory" />
 

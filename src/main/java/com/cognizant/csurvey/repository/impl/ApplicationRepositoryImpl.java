@@ -3,16 +3,15 @@ package com.cognizant.csurvey.repository.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
-import com.cognizant.csurvey.model.AggregateFeedbackStats;
 import com.cognizant.csurvey.model.Application;
 import com.cognizant.csurvey.model.ApplicationStats;
-import com.cognizant.csurvey.model.Feature;
+import com.cognizant.csurvey.model.User;
 import com.cognizant.csurvey.repository.api.ApplicationRepository;
 import com.mongodb.DBObject;
 
@@ -68,6 +67,12 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
 			statsList.add(stats);
 		}*/
 		return statsList;
+	}
+
+	@Override
+	public void saveUser(Application application, User user) {
+		application.getUsers().add(user);
+		mongoTemplate.save(application);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.cognizant.csurvey.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -14,7 +15,7 @@ public class Application {
 	private String name;
 	private String description;
 	@DBRef
-	private List<User> users;
+	private List<User> users = new ArrayList<User>();
 	
 	public ObjectId getId() {
 		return id;

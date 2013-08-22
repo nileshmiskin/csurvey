@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.model.Feedback;
 import com.cognizant.csurvey.model.User;
+import com.cognizant.csurvey.repository.api.ApplicationRepository;
 import com.cognizant.csurvey.repository.api.FeedbackRepository;
 import com.cognizant.csurvey.service.api.FeedbackService;
 
@@ -16,6 +17,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Autowired
 	private FeedbackRepository feedbackRepository;
+	
+	@Autowired
+	private ApplicationRepository applicationRepository;
 
 	@Override
 	public Feedback getFeebackById(String id) {
@@ -28,9 +32,13 @@ public class FeedbackServiceImpl implements FeedbackService {
 				feedback.getFeature(), feedback.getUser());
 		if (fd == null) {
 			feedbackRepository.save(feedback);
+			fd = feedbackRepository.findByFeatureForUser(
+					feedback.getFeature(), feedback.getUser());
+			applicationRepository.saveUser(feedback.getFeature().getApplication(), feedback.getUser());
 		} else {
 			feedbackRepository.update(feedback, fd.getId());
 		}
+		
 	}
 
 	@Override
