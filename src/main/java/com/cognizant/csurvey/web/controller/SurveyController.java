@@ -39,5 +39,19 @@ public class SurveyController {
 		model.addAttribute("featureInfo", featureInfoVO);
 		return "result";
 	}
+	
+	@RequestMapping("/featurefeedback/{username}")
+	public String getFeatureAndFeedback(Model model, HttpServletRequest request,
+			@PathVariable String username) {
+		Feature feature = featureService.getActiveFeature();
+		FeatureInfoVO featureInfoVO = new FeatureInfoVO();
+		featureInfoVO.setName(feature.getName());
+		String baseUrl = "http://" + serverName + ":" + serverPort + request.getContextPath();
+
+		featureInfoVO.setUrl(baseUrl + "/featureforuser/" + feature.getName() + "/"
+				+ username + ".do");
+		model.addAttribute("featureInfo", featureInfoVO);
+		return "result";
+	}
 
 }
