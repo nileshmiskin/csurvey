@@ -9,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.cognizant.csurvey.model.Application;
 import com.cognizant.csurvey.model.Feature;
+import com.cognizant.csurvey.service.api.ApplicationService;
 import com.cognizant.csurvey.service.api.FeatureService;
 import com.cognizant.csurvey.web.vo.FeatureInfoVO;
 
@@ -18,6 +20,9 @@ public class SurveyController {
 
 	@Autowired
 	private FeatureService featureService;
+	
+	@Autowired
+	private ApplicationService applicationService;
 
 	@Value("${application.server}")
 	private String serverName;
@@ -40,10 +45,12 @@ public class SurveyController {
 		return "result";
 	}
 	
-	@RequestMapping("/featurefeedback/{username}")
+	@RequestMapping("/featurefeedback/{application}/{username}")
 	public String getFeatureAndFeedback(Model model, HttpServletRequest request,
-			@PathVariable String username) {
-		Feature feature = featureService.getActiveFeature();
+			@PathVariable("application") String application,
+			@PathVariable("username") String username) {
+		Application app = applicationService.getApplicationByName(application);
+		Feature feature = featureService.getActiveFeature(app);
 		FeatureInfoVO featureInfoVO = new FeatureInfoVO();
 		featureInfoVO.setName(feature.getName());
 		String baseUrl = "http://" + serverName + ":" + serverPort + request.getContextPath();

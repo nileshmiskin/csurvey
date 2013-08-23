@@ -9,4 +9,5 @@ import com.cognizant.csurvey.model.User;
 public interface ApplicationRepository extends GenericRepository<Application>{
 	List<ApplicationStats> findApplicationStats();
 	void saveUser(Application application, User user);
+	Application findByName(String name);
 }

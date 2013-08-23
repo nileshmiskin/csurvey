@@ -2,7 +2,6 @@ package com.cognizant.csurvey.repository.impl;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -57,10 +56,25 @@ public class FeatureRepositoryImpl implements FeatureRepository {
 
 	@Override
 	public List<Feature> findByAppication(Application application) {
-		List<Feature> features = mongoTemplate.find(new Query(Criteria.where("application.$id")
-				.is(application.getId())), Feature.class);
+		List<Feature> features = mongoTemplate.find(
+				new Query(Criteria.where("application.$id").is(
+						application.getId())), Feature.class);
 		return features;
 
+	}
+
+	@Override
+	public Feature getActiveFeature(Application application) {
+		Feature feature = mongoTemplate
+				.findOne(
+						new Query(Criteria
+								.where("active")
+								.is(true)
+								.andOperator(
+										Criteria.where("application.$id").is(
+												application.getId()))),
+						Feature.class);
+		return feature;
 	}
 
 }

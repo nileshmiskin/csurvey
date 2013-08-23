@@ -75,4 +75,9 @@ public class ApplicationRepositoryImpl implements ApplicationRepository {
 		mongoTemplate.save(application);
 	}
 
+	@Override
+	public Application findByName(String name) {
+		return mongoTemplate.findOne(new Query(Criteria.where("name").is(name)), Application.class);
+	}
+
 }

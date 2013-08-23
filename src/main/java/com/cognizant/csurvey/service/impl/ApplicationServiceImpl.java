@@ -31,4 +31,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return applicationRepository.findById(applicationId);
 	}
 
+	@Override
+	public Application getApplicationByName(String name) {
+		return applicationRepository.findByName(name);
+	}
+
 }

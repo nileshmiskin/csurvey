@@ -91,4 +91,9 @@ public class FeatureServiceImpl implements FeatureService {
 		return featureRepository.findByAppication(application);
 	}
 
+	@Override
+	public Feature getActiveFeature(Application application) {
+		return featureRepository.getActiveFeature(application);
+	}
+
 }

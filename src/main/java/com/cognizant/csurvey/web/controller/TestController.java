@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cognizant.csurvey.model.Application;
-import com.cognizant.csurvey.model.ApplicationStats;
 import com.cognizant.csurvey.model.Feature;
 import com.cognizant.csurvey.model.Feedback;
 import com.cognizant.csurvey.model.User;
@@ -50,33 +49,6 @@ public class TestController {
 				new Query(Criteria.where("name").is(name)), User.class);
 		return user;
 	}
-
-	/*
-	 * private void createUsers() {
-	 * 
-	 * user1 = new User(); user1.setName("Ella Miller");
-	 * mongoTemplate.save(user1);
-	 * 
-	 * user2 = new User(); user2.setName("James Chapman");
-	 * mongoTemplate.save(user2);
-	 * 
-	 * user3 = new User(); user3.setName("Daniel Hudson");
-	 * mongoTemplate.save(user3);
-	 * 
-	 * user4 = new User(); user4.setName("William"); mongoTemplate.save(user4);
-	 * 
-	 * user5 = new User(); user5.setName("Alice Turner");
-	 * mongoTemplate.save(user5);
-	 * 
-	 * user6 = new User(); user6.setName("Ethan Holmes");
-	 * mongoTemplate.save(user6);
-	 * 
-	 * user7 = new User(); user7.setName("Andy Murray");
-	 * mongoTemplate.save(user7);
-	 * 
-	 * user8 = new User(); user8.setName("Laura Stone");
-	 * mongoTemplate.save(user8); }
-	 */
 
 	private Feature createFeature(String fname, String desc, String iname,
 			Application app) {
@@ -164,6 +136,8 @@ public class TestController {
 		listForA3.add(user7);
 		listForA3.add(user8);
 
+		List<User> listForA4 = new ArrayList<User>();
+
 		Application a1 = this
 				.createApp(
 						"O2 Wallet",
@@ -176,6 +150,12 @@ public class TestController {
 						listForA2);
 		Application a3 = this.createApp("My O2",
 				"Access your mobile accounts quickly and easily.", listForA3);
+
+		Application a4 = this
+				.createApp(
+						"My Bill",
+						"View your past bills, usage statistics, get personalized offers!",
+						listForA4);
 
 		// Create Feature
 		Feature a1f1 = this.createFeature("TrainTravel",
@@ -268,6 +248,12 @@ public class TestController {
 		this.createFeedback("I always use it..", true, a3f3, user3);
 		this.createFeedback("I like this feature. Its cool!", true, a3f3, user4);
 
+		Feature a4f1 = this
+				.createFeature(
+						"MyBill",
+						"View your past bills, usage statistics, get personalized offers!",
+						"MyBill.jpg", a4);
+
 		testIfItSavesFileToGridFs();
 
 		return "success";
@@ -338,26 +324,30 @@ public class TestController {
 			InputStream proirityPrizeStream = proirityPrizeURL.openStream();
 			String id5 = fileStorageRepository.save(proirityPrizeStream,
 					"image/jpeg", "PriorityPrizes.jpg");
-			
+
 			URL helpAtHandURL = new URL(
 					"http://static.o2.co.uk/www/img/kana/help_at_hand_support_tab_156_x_100.jpg");
 			InputStream helpAtHandStream = helpAtHandURL.openStream();
 			String id6 = fileStorageRepository.save(helpAtHandStream,
 					"image/jpeg", "HelpAtHand.jpg");
-			
+
 			URL homeBroadbandURL = new URL(
 					"http://www.steveandian.com/wp-content/themes/photonexus/timthumb.php?src=http://www.steveandian.com/wp-content/uploads/2013/03/O2HBB_retailHF_integ-selects.jpg&w=730&q=72");
 			InputStream homeBroadbandStream = homeBroadbandURL.openStream();
 			String id7 = fileStorageRepository.save(homeBroadbandStream,
 					"image/jpeg", "HomeBroadband.jpg");
-			
-			
+
 			URL payAndGoURL = new URL(
 					"http://images.mobilefun.co.uk/graphics/240pixelp/o2-pay-as-you-go-sim-card-pack-p153-240.jpg");
 			InputStream payAndGoStream = payAndGoURL.openStream();
 			String id8 = fileStorageRepository.save(payAndGoStream,
 					"image/jpeg", "PayAndGo.jpg");
-			
+
+			URL myBillURL = new URL(
+					"http://cache.daylife.com/imageserve/0gYGcYDfsp9Sr/400x300.jpg");
+			InputStream myBillStream = myBillURL.openStream();
+			String id9 = fileStorageRepository.save(myBillStream,
+					"image/jpeg", "MyBill.jpg");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

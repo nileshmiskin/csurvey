@@ -15,6 +15,7 @@ public interface FeatureService {
 	void deleteFeature(String id);
 	GridFSDBFile getFeatureImage(String imageName);
 	Feature getActiveFeature();
+	Feature getActiveFeature(Application application);
 	FeedbackStats getFeatureStats(Feature feature);
 	List<AggregateFeedbackStats> getAggergateFeedbackStats();
 	Feature getById(String id);

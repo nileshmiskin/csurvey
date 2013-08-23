@@ -9,4 +9,5 @@ public interface ApplicationService {
 	public List<ApplicationStats> getApplicationStats();
 	public List<Application> getAllApplications();
 	public Application getApplicationById(String applicationId);
+	public Application getApplicationByName(String name);
 }
